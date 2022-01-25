@@ -8,7 +8,7 @@ export default createGlobalStyle`
         list-style: none;
       }
       body {
-        font-family: 'Open Sans', sans-serif;
+        font-family: 'Source Code Pro', monospace;
       }
       /* App fit Height */ 
       html, body, #__next {
