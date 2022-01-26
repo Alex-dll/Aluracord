@@ -1,14 +1,26 @@
+import axios from "axios";
+
 import { Box, Button, Text, TextField, Image } from '@skynexui/components';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import appConfig from '../styles/appConfig.json';
 
 import { Titulo } from './Titulo';
 
+
 export function Login() {
   const [userName, setUserName] = useState('');
+  const [bio, setBio] = useState('');
   const router = useRouter()
+
+  useEffect(() => {
+    fetch(`https://api.github.com/users/${userName}`)
+      .then(response => response.json())
+      .then(data => setBio(data.bio))
+  }, [userName])
+
+  console.log(bio)
 
   return (
     <>
@@ -143,6 +155,21 @@ export function Login() {
                   {userName}
                 </Text>
               </>
+            }
+            {bio !== '' || undefined ?
+              <Text
+                variant="body4"
+                styleSheet={{
+                  color: appConfig.theme.colors.neutrals[200],
+                  backgroundColor: appConfig.theme.colors.primary[900],
+                  padding: '3px 10px',
+                  borderRadius: '1000px',
+                  marginTop: '3px'
+                }}
+              >
+                {bio}
+              </Text>
+              : null
             }
 
           </Box>
