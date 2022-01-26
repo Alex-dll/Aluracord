@@ -1,5 +1,3 @@
-import axios from "axios";
-
 import { Box, Button, Text, TextField, Image } from '@skynexui/components';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -19,8 +17,6 @@ export function Login() {
       .then(response => response.json())
       .then(data => setBio(data.bio))
   }, [userName])
-
-  console.log(bio)
 
   return (
     <>
