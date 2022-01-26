@@ -4,7 +4,6 @@ import GlobalStyles from '../styles/global';
 export default function HomePage() {
   return (
     <>
-      <GlobalStyles />
       <Login />
     </>
   )

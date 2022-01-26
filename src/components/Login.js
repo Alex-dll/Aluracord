@@ -1,11 +1,14 @@
 import { Box, Button, Text, TextField, Image } from '@skynexui/components';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
 
 import appConfig from '../styles/appConfig.json';
 
 import { Titulo } from './Titulo';
 
 export function Login() {
-  const username = 'alex-dll';
+  const [userName, setUserName] = useState('');
+  const router = useRouter()
 
   return (
     <>
@@ -35,6 +38,10 @@ export function Login() {
           {/* Formulário */}
           <Box
             as="form"
+            onSubmit={function (eventInfo) {
+              eventInfo.preventDefault();
+              router.push('/chat')
+            }}
             styleSheet={{
               display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
               width: { xs: '100%', sm: '50%' }, textAlign: 'center', marginBottom: '32px',
@@ -42,11 +49,18 @@ export function Login() {
           >
             <Titulo tag="h2">Boas vindas de volta!</Titulo>
             <Text variant="body3" styleSheet={{ marginBottom: '32px', color: appConfig.theme.colors.neutrals[300] }}>
-              {appConfig.name}
+              {userName === '' ? `${appConfig.name}` : `${appConfig.name} (${userName})`}
             </Text>
 
             <TextField
               fullWidth
+              value={userName}
+              required
+              onChange={
+                function onHandleChange(event) {
+                  setUserName(event.target.value)
+                }
+              }
               textFieldColors={{
                 neutral: {
                   textColor: appConfig.theme.colors.neutrals[200],
@@ -87,24 +101,50 @@ export function Login() {
               minHeight: '240px',
             }}
           >
-            <Image
-              styleSheet={{
-                borderRadius: '50%',
-                marginBottom: '16px',
-              }}
-              src={`https://github.com/${username}.png`}
-            />
-            <Text
-              variant="body4"
-              styleSheet={{
-                color: appConfig.theme.colors.neutrals[200],
-                backgroundColor: appConfig.theme.colors.primary[900],
-                padding: '3px 10px',
-                borderRadius: '1000px'
-              }}
-            >
-              {username}
-            </Text>
+            {userName === '' ?
+              <>
+                <Image
+                  styleSheet={{
+                    borderRadius: '50%',
+                    marginBottom: '16px',
+                  }}
+                  src={'https://i.pinimg.com/originals/e5/93/ab/e593ab0589d5f1b389e4dfbcce2bce20.gif'}
+                />
+                <Text
+                  variant="body4"
+                  styleSheet={{
+                    color: appConfig.theme.colors.neutrals[200],
+                    backgroundColor: appConfig.theme.colors.primary[900],
+                    padding: '3px 10px',
+                    borderRadius: '1000px'
+                  }}
+                >
+                  Vamos la! Insira seu user!
+                </Text>
+              </>
+              :
+              <>
+                <Image
+                  styleSheet={{
+                    borderRadius: '50%',
+                    marginBottom: '16px',
+                  }}
+                  src={`https://github.com/${userName}.png`}
+                />
+                <Text
+                  variant="body4"
+                  styleSheet={{
+                    color: appConfig.theme.colors.neutrals[200],
+                    backgroundColor: appConfig.theme.colors.primary[900],
+                    padding: '3px 10px',
+                    borderRadius: '1000px'
+                  }}
+                >
+                  {userName}
+                </Text>
+              </>
+            }
+
           </Box>
           {/* Photo Area */}
         </Box>
