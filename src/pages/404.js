@@ -5,7 +5,6 @@ import appConfig from '../styles/appConfig.json';
 
 import { Titulo } from '../components/Titulo';
 
-
 export default function Custom404() {
   const router = useRouter()
 

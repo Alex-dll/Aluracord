@@ -6,7 +6,6 @@ import appConfig from '../styles/appConfig.json';
 
 import { Titulo } from './Titulo';
 
-
 export function Login() {
   const [userName, setUserName] = useState('');
   const [bio, setBio] = useState('');

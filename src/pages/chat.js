@@ -19,6 +19,16 @@ export default function ChatPage() {
     setMessage('')
   }
 
+  function handleDeleteMessage(messageToRemove) {
+    const messageId = messageToRemove.id
+    const messageListFiltered = messageList.filter((messageFiltered) => {
+      return messageFiltered.id != messageId
+    })
+
+    setMessageList(messageListFiltered);
+  }
+
+
   return (
     <Box
       styleSheet={{
@@ -57,7 +67,7 @@ export default function ChatPage() {
           }}
         >
 
-          <MessageList messageList={messageList} />
+          <MessageList messageList={messageList} handleDeleteMessage={handleDeleteMessage} />
 
           <Box
             as="form"
@@ -116,7 +126,9 @@ function Header() {
   )
 }
 
-function MessageList({ messageList }) {
+function MessageList(props) {
+  const handleDeleteMessage = props.handleDeleteMessage
+
   return (
     <Box
       tag="ul"
@@ -129,7 +141,7 @@ function MessageList({ messageList }) {
         marginBottom: '16px',
       }}
     >
-      {messageList.map((message) => {
+      {props.messageList.map((message) => {
         return (
           <Text
             key={message.id}
@@ -173,8 +185,40 @@ function MessageList({ messageList }) {
                 {(new Date().toLocaleDateString())}
               </Text>
             </Box>
-            {message.text}
-          </Text>)
+            <Box
+              styleSheet={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center'
+              }}
+            >
+              {message.text}
+              <Button
+                onClick={(event) => {
+                  event.preventDefault();
+                  handleDeleteMessage(message);
+                }}
+                label="X"
+                data-id={message.id}
+                styleSheet={{
+                  fontSize: '15px',
+                  fontWeight: 'bold',
+                  marginLeft: 'auto',
+                  color: '#FFF',
+                  backgroundColor: 'rgba(0,0,0,.5)',
+                  width: '20px',
+                  height: '20px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                }}
+              >
+              </Button>
+            </Box>
+          </Text>
+
+        )
       })}
     </Box>
   )
