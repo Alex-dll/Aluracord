@@ -12,11 +12,15 @@ export default function ChatPage() {
       from: 'alex-dll',
       text: newMessage,
     }
-    setMessageList([
-      message,
-      ...messageList
-    ])
-    setMessage('')
+
+    if (message.text !== '') {
+      setMessageList([
+        message,
+        ...messageList
+      ])
+      setMessage('')
+    }
+
   }
 
   function handleDeleteMessage(messageToRemove) {
@@ -74,6 +78,8 @@ export default function ChatPage() {
             styleSheet={{
               display: 'flex',
               alignItems: 'center',
+              justifyContent: 'center',
+              padding: '5px',
             }}
           >
             <TextField
@@ -99,6 +105,24 @@ export default function ChatPage() {
                 backgroundColor: appConfig.theme.colors.primary[400],
                 marginRight: '12px',
                 color: appConfig.theme.colors.neutrals[999],
+              }}
+            />
+            <Button iconName="FaArrowRight"
+              onClick={(event) => {
+                event.preventDefault();
+                handleNewMessage(message);
+              }}
+              styleSheet={{
+                height: '5px',
+                marginBottom: '9px',
+              }}
+              type='submit'
+              size="sm"
+              buttonColors={{
+                contrastColor: appConfig.theme.colors.neutrals["000"],
+                mainColor: appConfig.theme.colors.primary[500],
+                mainColorLight: appConfig.theme.colors.primary[400],
+                mainColorStrong: appConfig.theme.colors.primary[600],
               }}
             />
           </Box>
