@@ -8,6 +8,15 @@ import { ButtonSendSticker } from '../components/ButtonSendSticker';
 
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
 
+function realTimeInsertMessages(addMessage) {
+  return supabase
+    .from('messages')
+    .on('INSERT', (realTimeMessage) => {
+      addMessage(realTimeMessage.new)
+    })
+    .subscribe()
+}
+
 export default function ChatPage() {
   const [message, setMessage] = useState('')
   const [messageList, setMessageList] = useState([]);
@@ -24,6 +33,17 @@ export default function ChatPage() {
       .then(({ data }) => {
         setMessageList(data)
       })
+
+    realTimeInsertMessages((newMessage) => {
+      if (newMessage !== '') {
+        setMessageList(() => {
+          return [
+            newMessage,
+            ...messageList
+          ]
+        })
+      }
+    })
   }, [])
 
   function handleNewMessage(newMessage) {
@@ -38,28 +58,17 @@ export default function ChatPage() {
         message
       ])
       .then(({ data }) => {
-        setMessageList([
-          data[0],
-          ...messageList
-        ])
       })
-    // if (data.message.text !== '') {
-    //   setMessageList([
-    //     message,
-    //     ...messageList
-    //   ])
-    // }
   }
 
-  function handleDeleteMessage(messageToRemove) {
-    const messageId = messageToRemove.id
-    const messageListFiltered = messageList.filter((messageFiltered) => {
-      return messageFiltered.id != messageId
-    })
+  // function handleDeleteMessage(messageToRemove) {
+  //   const messageId = messageToRemove.id
+  //   const messageListFiltered = messageList.filter((messageFiltered) => {
+  //     return messageFiltered.id != messageId
+  //   })
 
-    setMessageList(messageListFiltered);
-  }
-
+  //   setMessageList(messageListFiltered);
+  // }
 
   return (
     <Box
@@ -135,7 +144,11 @@ export default function ChatPage() {
                 color: appConfig.theme.colors.neutrals[999],
               }}
             />
-            <ButtonSendSticker />
+            <ButtonSendSticker
+              onStickerClick={(sticker) => {
+                handleNewMessage(':sticker:' + sticker)
+              }}
+            />
             <Button iconName="FaArrowRight"
               onClick={(event) => {
                 event.preventDefault();
@@ -245,8 +258,14 @@ function MessageList(props) {
                 alignItems: 'center'
               }}
             >
-              {message.text}
-              <Button
+              {message.text.startsWith(':sticker:')
+                ? (
+                  <Image src={message.text.replace(':sticker:', '')} />
+                ) : (
+                  message.text
+                )
+              }
+              {/* <Button
                 onClick={(event) => {
                   event.preventDefault();
                   handleDeleteMessage(message);
@@ -267,7 +286,7 @@ function MessageList(props) {
                   cursor: 'pointer',
                 }}
               >
-              </Button>
+              </Button> */}
             </Box>
           </Text >
 
