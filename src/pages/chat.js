@@ -2,13 +2,6 @@ import { createClient } from '@supabase/supabase-js'
 
 const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
 
-supabase
-  .from('messages')
-  .select('*')
-  .then((dados) => {
-    console.log('dados', dados)
-  })
-
 import { Box, Text, TextField, Image, Button } from '@skynexui/components';
 import React, { useEffect, useState } from 'react';
 import appConfig from '../styles/appConfig.json';
@@ -17,21 +10,40 @@ export default function ChatPage() {
   const [message, setMessage] = useState('')
   const [messageList, setMessageList] = useState([])
 
+  useEffect(() => {
+    supabase
+      .from('messages')
+      .select('*')
+      .order('id', { ascending: false })
+      .then(({ data }) => {
+        setMessageList(data)
+      })
+  }, [])
+
   function handleNewMessage(newMessage) {
     const message = {
-      id: messageList.length,
+      // id: messageList.length,
       from: 'alex-dll',
       text: newMessage,
     }
 
-    if (message.text !== '') {
-      setMessageList([
-        message,
-        ...messageList
+    supabase
+      .from('messages')
+      .insert([
+        message
       ])
-      setMessage('')
-    }
-
+      .then(({ data }) => {
+        setMessageList([
+          data[0],
+          ...messageList
+        ])
+      })
+    // if (data.message.text !== '') {
+    //   setMessageList([
+    //     message,
+    //     ...messageList
+    //   ])
+    // }
   }
 
   function handleDeleteMessage(messageToRemove) {
