@@ -35,14 +35,12 @@ export default function ChatPage() {
       })
 
     realTimeInsertMessages((newMessage) => {
-      if (newMessage !== '') {
-        setMessageList(() => {
-          return [
-            newMessage,
-            ...messageList
-          ]
-        })
-      }
+      setMessageList((oldMessage) => {
+        return [
+          newMessage,
+          ...oldMessage
+        ]
+      });
     })
   }, [])
 
@@ -59,6 +57,8 @@ export default function ChatPage() {
       ])
       .then(({ data }) => {
       })
+
+    setMessage('')
   }
 
   // function handleDeleteMessage(messageToRemove) {
@@ -108,7 +108,7 @@ export default function ChatPage() {
           }}
         >
 
-          <MessageList messageList={messageList} handleDeleteMessage={handleDeleteMessage} />
+          <MessageList messageList={messageList} />
 
           <Box
             as="form"
