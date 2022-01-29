@@ -47,7 +47,7 @@ export function Login() {
             as="form"
             onSubmit={function (eventInfo) {
               eventInfo.preventDefault();
-              router.push('/chat')
+              router.push(`/chat?username=${userName}`)
             }}
             styleSheet={{
               display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
