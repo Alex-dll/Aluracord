@@ -1,5 +1,16 @@
+import { createClient } from '@supabase/supabase-js'
+
+const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY)
+
+supabase
+  .from('messages')
+  .select('*')
+  .then((dados) => {
+    console.log('dados', dados)
+  })
+
 import { Box, Text, TextField, Image, Button } from '@skynexui/components';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import appConfig from '../styles/appConfig.json';
 
 export default function ChatPage() {
@@ -195,9 +206,9 @@ function MessageList(props) {
                 }}
                 src={`https://github.com/${message.from}.png`}
               />
-              <Text tag="strong">
+              <Text tag="strong" >
                 {message.from}
-              </Text>
+              </ Text>
               <Text
                 styleSheet={{
                   fontSize: '10px',
@@ -208,7 +219,7 @@ function MessageList(props) {
               >
                 {(new Date().toLocaleDateString())}
               </Text>
-            </Box>
+            </Box >
             <Box
               styleSheet={{
                 display: 'flex',
@@ -240,10 +251,10 @@ function MessageList(props) {
               >
               </Button>
             </Box>
-          </Text>
+          </Text >
 
         )
       })}
-    </Box>
+    </Box >
   )
 }
